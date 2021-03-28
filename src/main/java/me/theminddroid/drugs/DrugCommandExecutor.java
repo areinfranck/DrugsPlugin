@@ -32,7 +32,7 @@ public class DrugCommandExecutor implements CommandExecutor {
             for (Drug value : Drug.values()) {
                 player.sendMessage(ChatColor.DARK_GREEN + " - " + ChatColor.GOLD + value.name());
             }
-            player.sendMessage(ChatColor.DARK_GREEN + " - " + ChatColor.RED + "Narcan");
+            player.sendMessage(ChatColor.DARK_GREEN + " - " + ChatColor.YELLOW + "Narcan");
             player.sendMessage(ChatColor.DARK_GREEN + "Usage: " + ChatColor.GOLD + "/drugs <drug>" + ChatColor.DARK_GREEN
                     + " to spawn.");
             return true;
