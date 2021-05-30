@@ -50,7 +50,7 @@ public class DrugListener implements Listener {
             return;
         }
 
-        if (player.hasPermission("drugs.disable")) {
+        if (player.hasPermission("drugs.disable") && !player.isOp()) {
             player.sendMessage(ChatColor.RED + "You do not have the required permissions to take drugs.");
             return;
         }
