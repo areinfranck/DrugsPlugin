@@ -50,6 +50,11 @@ public class DrugListener implements Listener {
             return;
         }
 
+        if (player.hasPermission("drugs.disable")) {
+            player.sendMessage(ChatColor.RED + "You do not have the required permissions to take drugs.");
+            return;
+        }
+
         if (player.getGameMode() == GameMode.SURVIVAL) {
             int itemAmount = itemInMainHand.getAmount();
             itemInMainHand.setAmount(itemAmount - 1);
