@@ -61,6 +61,10 @@ public enum Drug {
         this.material = material;
     }
 
+    public String getDrugName() {
+        return this.name();
+    }
+
     public Material getMaterial() {
         return material;
     }

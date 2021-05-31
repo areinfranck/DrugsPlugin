@@ -21,6 +21,7 @@ public final class DrugsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DrugListener(), this);
         getServer().getPluginManager().registerEvents(new NarcanListener(), this);
         Objects.requireNonNull(getCommand("drugs")).setExecutor(new DrugCommandExecutor());
+        Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new AutoTab());
         registerGlow();
 
         Metrics metrics = new Metrics(this, 10825);

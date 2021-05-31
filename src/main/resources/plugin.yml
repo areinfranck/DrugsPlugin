@@ -1,5 +1,5 @@
 name: Drugs
-version: 4.1
+version: 4.4
 main: me.theminddroid.drugs.DrugsPlugin
 api-version: "1.15"
 authors: [TheMindDroid]
