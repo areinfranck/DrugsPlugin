@@ -1,6 +1,7 @@
 package me.theminddroid.drugs;
 
 import me.theminddroid.drugs.listeners.DrugListener;
+import me.theminddroid.drugs.listeners.HennessyListener;
 import me.theminddroid.drugs.listeners.NarcanListener;
 import me.theminddroid.drugs.models.Glow;
 import org.bukkit.Bukkit;
@@ -20,6 +21,7 @@ public final class DrugsPlugin extends JavaPlugin {
         System.out.println("Drugs plugin has started.");
         getServer().getPluginManager().registerEvents(new DrugListener(), this);
         getServer().getPluginManager().registerEvents(new NarcanListener(), this);
+        getServer().getPluginManager().registerEvents(new HennessyListener(), this);
         Objects.requireNonNull(getCommand("drugs")).setExecutor(new DrugCommandExecutor());
         Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new AutoTab());
         registerGlow();
