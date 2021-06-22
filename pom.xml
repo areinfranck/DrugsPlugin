@@ -6,7 +6,7 @@
 
     <groupId>me.theminddroid</groupId>
     <artifactId>Drugs</artifactId>
-    <version>4.5</version>
+    <version>5.1</version>
     <packaging>jar</packaging>
 
     <name>Drugs</name>

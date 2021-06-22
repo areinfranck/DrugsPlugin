@@ -52,7 +52,7 @@ public class DrugCommandExecutor implements CommandExecutor {
         return true;
     }
 
-    private ItemStack createNarcanItem() {
+    public ItemStack createNarcanItem() {
         return getItemStack(Material.MILK_BUCKET, ChatColor.RED + "Narcan", ChatColor.DARK_GREEN
                 + "Removes all " + ChatColor.GOLD + "drug " + ChatColor.DARK_GREEN + "and" + ChatColor.GOLD
                 + " withdrawal " + ChatColor.DARK_GREEN + "effects.");
@@ -72,7 +72,7 @@ public class DrugCommandExecutor implements CommandExecutor {
 
     }
 
-    private ItemStack createItemStackForDrug(Drug drug) {
+    public ItemStack createItemStackForDrug(Drug drug) {
         return getItemStack(
                 drug.getMaterial(),
                 drug.getDisplayName(),

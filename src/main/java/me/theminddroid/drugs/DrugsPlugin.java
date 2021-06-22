@@ -3,7 +3,9 @@ package me.theminddroid.drugs;
 import me.theminddroid.drugs.listeners.DrugListener;
 import me.theminddroid.drugs.listeners.HennessyListener;
 import me.theminddroid.drugs.listeners.NarcanListener;
+import me.theminddroid.drugs.models.Drug;
 import me.theminddroid.drugs.models.Glow;
+import me.theminddroid.drugs.models.Recipes;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -18,13 +20,24 @@ public final class DrugsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        System.out.println("Drugs plugin has started.");
+        System.out.println("[Drugs] Drugs plugin has started.");
         getServer().getPluginManager().registerEvents(new DrugListener(), this);
         getServer().getPluginManager().registerEvents(new NarcanListener(), this);
         getServer().getPluginManager().registerEvents(new HennessyListener(), this);
         Objects.requireNonNull(getCommand("drugs")).setExecutor(new DrugCommandExecutor());
         Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new AutoTab());
         registerGlow();
+
+
+        System.out.println("[Drugs] Building drug recipes:");
+
+        for (Drug recipe : Drug.values()) {
+            System.out.print("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
+            Recipes craftingRecipe = new Recipes(recipe.getDrugName(), recipe.getCraftMatOne(), recipe.getCraftMatTwo(), recipe.getCraftMatThree());
+            getServer().addRecipe(craftingRecipe.getDrugRecipe());
+
+            System.out.println(" Complete.");
+        }
 
         Metrics metrics = new Metrics(this, 10825);
     }
