@@ -1,40 +1,37 @@
 package me.theminddroid.drugs.models;
 
-import me.theminddroid.drugs.DrugCommandExecutor;
-import org.bukkit.Material;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.Plugin;
 
 public class Recipes {
+    public static Recipe getDrugRecipe(Plugin plugin, Drug drug) {
+        ShapedRecipe drugRecipe = new ShapedRecipe(
+                getKey(plugin, drug),
+                new ItemStack(drug.getMaterial())
+        );
 
-    private ShapedRecipe drugRecipe;
-    private final String drugName;
-    private final Material materialOne;
-    private final Material materialTwo;
-    private final Material materialThree;
+        if (drug.getRecipe() instanceof DrugRecipe.VerticalShaped) {
+            DrugRecipe.VerticalShaped recipe = ((DrugRecipe.VerticalShaped) drug.getRecipe());
 
-    public Recipes(String drugName, Material materialOne, Material materialTwo, Material materialThree) {
-        this.drugName = drugName;
-        this.materialOne = materialOne;
-        this.materialTwo = materialTwo;
-        this.materialThree = materialThree;
+            drugRecipe.shape(" X ", " Y ", " Z ");
+            drugRecipe.setIngredient('X', recipe.getTop());
+            drugRecipe.setIngredient('Y', recipe.getMiddle());
+            drugRecipe.setIngredient('Z', recipe.getBottom());
+            return drugRecipe;
+        }
+
+        if (drug.getRecipe() instanceof DrugRecipe.None) {
+            return null;
+        }
+
+        throw new NotImplementedException("Drug type " + drug.getClass().getName() + " is not supported.");
     }
 
-    private void buildRecipe(String drugName, Material materialOne, Material materialTwo, Material materialThree) {
-
-        Drug drug = Drug.getByNameCaseInsensitive(drugName);
-        ItemStack drugStack = new DrugCommandExecutor().createItemStackForDrug(drug);
-        drugRecipe = new ShapedRecipe(NamespacedKey.minecraft(drugName.toLowerCase()), drugStack);
-
-        drugRecipe.shape(" X ", " Y ", " Z ");
-        drugRecipe.setIngredient('X', materialOne);
-        drugRecipe.setIngredient('Y', materialTwo);
-        drugRecipe.setIngredient('Z', materialThree);
-    }
-
-    public ShapedRecipe getDrugRecipe() {
-        buildRecipe(drugName, materialOne, materialTwo, materialThree);
-        return drugRecipe;
+    public static NamespacedKey getKey(Plugin plugin, Drug drug) {
+        return new NamespacedKey(plugin, drug.getDrugName());
     }
 }
