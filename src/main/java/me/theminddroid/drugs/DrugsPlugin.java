@@ -1,7 +1,6 @@
 package me.theminddroid.drugs;
 
-import me.theminddroid.drugs.listeners.DrugListener;
-import me.theminddroid.drugs.listeners.HennessyListener;
+import me.theminddroid.drugs.listeners.PsychoactiveDrugListener;
 import me.theminddroid.drugs.listeners.NarcanListener;
 import me.theminddroid.drugs.models.Drug;
 import me.theminddroid.drugs.models.Glow;
@@ -9,6 +8,7 @@ import me.theminddroid.drugs.models.Recipes;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,11 +21,10 @@ public final class DrugsPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         System.out.println("[Drugs] Drugs plugin has started.");
-        getServer().getPluginManager().registerEvents(new DrugListener(), this);
+        getServer().getPluginManager().registerEvents(new PsychoactiveDrugListener(), this);
         getServer().getPluginManager().registerEvents(new NarcanListener(), this);
-        getServer().getPluginManager().registerEvents(new HennessyListener(), this);
         Objects.requireNonNull(getCommand("drugs")).setExecutor(new DrugCommandExecutor());
-        Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new AutoTab());
+        Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new DrugTabCompleter());
         registerGlow();
 
 
@@ -33,13 +32,15 @@ public final class DrugsPlugin extends JavaPlugin {
 
         for (Drug recipe : Drug.values()) {
             System.out.print("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
-            Recipes craftingRecipe = new Recipes(recipe.getDrugName(), recipe.getCraftMatOne(), recipe.getCraftMatTwo(), recipe.getCraftMatThree());
-            getServer().addRecipe(craftingRecipe.getDrugRecipe());
+            Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
+            if (drugRecipe != null) {
+                getServer().addRecipe(drugRecipe);
+            }
 
             System.out.println(" Complete.");
         }
 
-        Metrics metrics = new Metrics(this, 10825);
+        new Metrics(this, 10825);
     }
 
     public void registerGlow() {
@@ -47,26 +48,19 @@ public final class DrugsPlugin extends JavaPlugin {
             Field f = Enchantment.class.getDeclaredField("acceptingNew");
             f.setAccessible(true);
             f.set(null, true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            NamespacedKey key = new NamespacedKey(this, getDescription().getName());
-
-            Glow glow = new Glow(key);
-            Enchantment.registerEnchantment(glow);
-        }
-        catch (IllegalArgumentException ignored){
-        }
-        catch(Exception e){
+            Enchantment.registerEnchantment(createGlowEnchant());
+        } catch (IllegalArgumentException ignored) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Glow createGlowEnchant() {
-        NamespacedKey key = new NamespacedKey(this, getDescription().getName());
-        return new Glow(key);
+        return new Glow(new NamespacedKey(this, "glow"));
     }
 
     public static DrugsPlugin getInstance() {
@@ -79,7 +73,13 @@ public final class DrugsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        for (Drug recipe : Drug.values()) {
+            System.out.print("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
+            getServer().removeRecipe(Recipes.getKey(this, recipe));
+
+            System.out.println(" Complete.");
+        }
+
         System.out.println("Drugs plugin has terminated.");
     }
 }
