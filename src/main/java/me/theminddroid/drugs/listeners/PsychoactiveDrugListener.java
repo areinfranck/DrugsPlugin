@@ -51,7 +51,7 @@ public class PsychoactiveDrugListener implements Listener {
             return;
         }
 
-        if (player.getGameMode() == GameMode.SURVIVAL) {
+        if (player.getGameMode() == GameMode.SURVIVAL && !player.isDead()) {
             int itemAmount = itemInMainHand.getAmount();
             itemInMainHand.setAmount(itemAmount - 1);
         }
@@ -81,7 +81,7 @@ public class PsychoactiveDrugListener implements Listener {
 
         //number of times to take the drug before it kills you
         if (amountOfTimesUsed >= 5) {
-            player.setHealth(0);
+            Bukkit.getScheduler().runTaskLater(DrugsPlugin.getInstance(), () -> player.setHealth(0), 1);
             player.sendMessage(ChatColor.RED + "You overdosed and died...");
             return;
         }

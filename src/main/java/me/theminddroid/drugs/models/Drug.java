@@ -9,40 +9,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Drug {
-    Narcan(Material.MILK_BUCKET,
+    Narcan(
+            Material.MILK_BUCKET,
             "narcan",
             new DrugType.Narcan(),
-            new DrugRecipe.None()
-    ),
-    Cocaine(Material.SUGAR,
+            new DrugRecipe.None()),
+    Cocaine(
+            Material.SUGAR,
             "speed",
             new DrugType.PsychoActive(Sound.ENTITY_PLAYER_BURP,
-            new DrugEffect(PotionEffectType.SPEED, "gained a speed buff"),
-            new DrugEffect(PotionEffectType.SLOW, "gained a speed reduction")),
+                    new DrugEffect(PotionEffectType.SPEED, "gained a speed buff"),
+                    new DrugEffect(PotionEffectType.SLOW, "gained a speed reduction")),
             new DrugRecipe.VerticalShaped(Material.SUGAR, Material.COCOA_BEANS, Material.PAPER)),
-    Heroin(Material.WHITE_DYE,
+    Heroin(
+            Material.WHITE_DYE,
             "regeneration",
             new DrugType.PsychoActive(Sound.ENTITY_PLAYER_BURP,
-            new DrugEffect(PotionEffectType.REGENERATION, "gained a regeneration buff"),
-            new DrugEffect(PotionEffectType.WEAKNESS, "have become weak")),
+                    new DrugEffect(PotionEffectType.REGENERATION, "gained a regeneration buff"),
+                    new DrugEffect(PotionEffectType.WEAKNESS, "have become weak")),
             new DrugRecipe.VerticalShaped(Material.SUGAR, Material.WHEAT_SEEDS, Material.PAPER)),
-    Adderall(Material.GOLD_NUGGET,
+    Adderall(
+            Material.GOLD_NUGGET,
             "haste",
             new DrugType.PsychoActive(Sound.ENTITY_PLAYER_BURP,
-            new DrugEffect(PotionEffectType.FAST_DIGGING, "gained a digging speed buff"),
-            new DrugEffect(PotionEffectType.SLOW_DIGGING, "gained a digging speed reduction")),
+                    new DrugEffect(PotionEffectType.FAST_DIGGING, "gained a digging speed buff"),
+                    new DrugEffect(PotionEffectType.SLOW_DIGGING, "gained a digging speed reduction")),
             new DrugRecipe.VerticalShaped(Material.SUGAR, Material.HONEYCOMB, Material.PAPER)),
-    Steroids(Material.PRISMARINE_CRYSTALS,
+    Steroids(
+            Material.PRISMARINE_CRYSTALS,
             "strength",
             new DrugType.PsychoActive(Sound.ENTITY_PLAYER_BURP,
-            new DrugEffect(PotionEffectType.INCREASE_DAMAGE, "gained a strength buff"),
-            new DrugEffect(PotionEffectType.WEAKNESS, "are weakened")),
+                    new DrugEffect(PotionEffectType.INCREASE_DAMAGE, "gained a strength buff"),
+                    new DrugEffect(PotionEffectType.WEAKNESS, "are weakened")),
             new DrugRecipe.VerticalShaped(Material.SUGAR, Material.BONE_MEAL, Material.PAPER)),
-    Hennessy(Material.HONEY_BOTTLE,
+    Hennessy(
+            Material.HONEY_BOTTLE,
             "luck",
             new DrugType.PsychoActive(Sound.ENTITY_GENERIC_DRINK,
-            new DrugEffect(PotionEffectType.LUCK, "gained luck"),
-            new DrugEffect(PotionEffectType.POISON, "are poisoned")),
+                    new DrugEffect(PotionEffectType.LUCK, "gained luck"),
+                    new DrugEffect(PotionEffectType.POISON, "are poisoned")),
             new DrugRecipe.VerticalShaped(Material.WHEAT, Material.SWEET_BERRIES, Material.GLASS_BOTTLE));
 
     private static final Map<String, Drug> byDisplayName = new HashMap<>();

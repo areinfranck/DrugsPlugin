@@ -2,7 +2,6 @@ package me.theminddroid.drugs.models;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
@@ -11,7 +10,7 @@ public class Recipes {
     public static Recipe getDrugRecipe(Plugin plugin, Drug drug) {
         ShapedRecipe drugRecipe = new ShapedRecipe(
                 getKey(plugin, drug),
-                new ItemStack(drug.getMaterial())
+               DrugItems.createItemStackForDrug(drug)
         );
 
         if (drug.getRecipe() instanceof DrugRecipe.VerticalShaped) {

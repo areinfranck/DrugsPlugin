@@ -29,5 +29,4 @@ public abstract class DrugRecipe {
             return bottom;
         }
     }
-
 }
