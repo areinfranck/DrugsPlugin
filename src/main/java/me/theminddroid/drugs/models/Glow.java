@@ -39,7 +39,7 @@ public class Glow extends Enchantment {
     @Override
     public String getName() {
         // TODO Auto-generated method stub
-        return null;
+        return "Drug";
     }
 
     @Override
