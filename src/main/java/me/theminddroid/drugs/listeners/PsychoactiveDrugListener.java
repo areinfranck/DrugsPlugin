@@ -60,7 +60,7 @@ public class PsychoactiveDrugListener implements Listener {
 
         player.playSound(player.getLocation(), drugType.getConsumeSound(), 10.f, (float) (1.7 + .2 * Math.random()));
         player.addPotionEffect((new PotionEffect(drugType.getEffect().getEffectType(), 2400, 2)));
-        player.sendMessage(ChatColor.DARK_GREEN + "§lYou took " + ChatColor.GOLD + "§l" + drug.name().toLowerCase()
+        player.sendMessage(ChatColor.DARK_GREEN + "§lYou took " + ChatColor.GOLD + "§l" + drug.name()
                 + ChatColor.DARK_GREEN + " §land " + drugType.getEffect().getMessage() + " for " + ChatColor.GOLD
                 + "§l2 minutes" + ChatColor.DARK_GREEN + "§l!");
 
