@@ -7,6 +7,7 @@ import me.theminddroid.drugs.models.Glow;
 import me.theminddroid.drugs.models.Recipes;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
@@ -26,6 +27,8 @@ public final class DrugsPlugin extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
+        FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
+
         getServer().getPluginManager().registerEvents(new PsychoactiveDrugListener(), this);
         getServer().getPluginManager().registerEvents(new NarcanListener(), this);
 
@@ -34,9 +37,21 @@ public final class DrugsPlugin extends JavaPlugin {
 
         registerGlow();
 
+        new Metrics(this, 10825);
+
+        if (!messageConfig.getBoolean("allRecipes.enabled")) {
+            System.out.println("[Drugs] Drug recipes have been disabled. Visit config file to change.");
+            return;
+        }
+
         System.out.println("[Drugs] Building drug recipes:");
 
         for (Drug recipe : Drug.values()) {
+
+            if (!messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled")) {
+                continue;
+            }
+
             System.out.print("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
             Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
             if (drugRecipe != null) {
@@ -45,8 +60,6 @@ public final class DrugsPlugin extends JavaPlugin {
 
             System.out.println(" Complete.");
         }
-
-        new Metrics(this, 10825);
     }
 
     public void registerGlow() {

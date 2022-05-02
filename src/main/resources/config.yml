@@ -1,3 +1,44 @@
+################################################[DRUGS v6.1]###########################################################
+
+# DISCLAIMER: EDIT AT YOUR OWN RISK! IMPROPER USE OF CONFIG MAY RESULT IN CRASHES.
+ # If after editing the config you experience issues, delete the file and restart the server.
+
+
+# ----------------------------------------[DRUG AND RECIPE TOGGLE]-----------------------------------------------------
+
+# Allows administrators to toggle individual drug usage, along with respective crafting recipes.
+
+# Toggle all recipes server-wide for all players.
+allRecipes:
+  enabled: true
+
+# Toggle individual recipes server-wide for all players.
+NarcanRecipe:
+  enabled: true
+CocaineRecipe:
+  enabled: true
+HeroinRecipe:
+  enabled: true
+AdderallRecipe:
+  enabled: true
+SteroidsRecipe:
+  enabled: true
+HennessyRecipe:
+  enabled: true
+KetamineRecipe:
+  enabled: true
+MarijuanaRecipe:
+  enabled: true
+LSDRecipe:
+  enabled: true
+EcstasyRecipe:
+  enabled: true
+AyahuascaRecipe:
+  enabled: true
+ShroomsRecipe:
+  enabled: true
+
+
 # -----------------------------------------[TRANSLATION SECTION]-------------------------------------------------------
 
 # It is recommended that you DO NOT edit the following section. It is intended for language translation only.
