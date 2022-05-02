@@ -1,0 +1,35 @@
+# -----------------------------------------[TRANSLATION SECTION]-------------------------------------------------------
+
+# It is recommended that you DO NOT edit the following section. It is intended for language translation only.
+  # Make sure ALL FIELDS are filled, or plugin may not function properly.
+  # DISCLAIMER: Edits to this section may result in formatting issues.
+  # '§' is the symbol to denote color codes in messages.
+
+#DrugCommandExecutor
+verifyPermission: "§cYou do not have the required permissions to run this command."
+verifyDrug: "§cPlease select a valid drug."
+announceDrug: "§2You spawned "
+selectDrug: "§c§lPlease select one of the following drugs:"
+usageMessage: "§2Usage: §6/drugs <drug>§2 to spawn."
+
+#DrugsItems
+narcanMessage: "§2Removes all §6drug §2and §6withdrawal §2effects."
+messageStartPsych: "§2Grants §6" # [effect name]
+messageEndPsych: "§2 for two minutes."
+useInstructionPsych: "§2Shift click to use."
+
+#NarcanListner
+milkMessage: "§cYou must use Narcan to cancel the effects of drugs..."
+consumeNarcan: "§2Your mind feels clear now..."
+
+#PsychoactiveDrugListener
+verifyUsage: "§cYou must SHIFT + RIGHT-CLICK to consume drugs..."
+drugPermission: "§cYou do not have the required permissions to take drugs."
+consumeStart: "§2§lYou took §6§l" # [drug name]
+consumeMiddle: " §2§land " # [effect message]
+consumeEnd: " for §6§l2 minutes§2§l!"
+passingMessage: "§cI feel like passing out..."
+overdoseMessage: "§cYou overdosed and died..."
+dizzyMessage: "§c§oUh oh, I don't feel so good..."
+withdrawalMessageStart: "§2§lYou're suffering from §6§lwithdrawal §2§land " # [withdrawal effect message]
+withdrawalMessageEnd: " §2§lfor §6§l30 seconds§2§l..."

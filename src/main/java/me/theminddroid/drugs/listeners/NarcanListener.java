@@ -5,6 +5,7 @@ import me.theminddroid.drugs.states.DrugUsageState;
 import me.theminddroid.drugs.DrugsPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,28 +19,31 @@ import static me.theminddroid.drugs.DrugUtilities.*;
 public class NarcanListener implements Listener {
     @EventHandler
     public void onDrinkMilk(PlayerItemConsumeEvent event) {
+
+        FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
+
         if (event.getItem().getType() != Material.MILK_BUCKET) {
             return;
         }
 
         if (Objects.requireNonNull(event.getItem().getItemMeta()).getDisplayName().equals(ChatColor.RED + "Narcan")) {
-            useNarcan(event);
+            useNarcan(event, messageConfig);
             return;
         }
-        cancelIfPlayerOnDrugs(event);
+        cancelIfPlayerOnDrugs(event, messageConfig);
     }
 
-    private void cancelIfPlayerOnDrugs(PlayerItemConsumeEvent event) {
+    private void cancelIfPlayerOnDrugs(PlayerItemConsumeEvent event, FileConfiguration messageConfig) {
         Player player = event.getPlayer();
         if (Arrays.stream(Drug.values()).noneMatch(drug -> playerIsOnDrugs(player, drug) || playerIsOnDrugWithdrawal(player, drug))) {
             return;
         }
 
         event.setCancelled(true);
-        player.sendMessage(ChatColor.RED + "You must use Narcan to cancel the effects of drugs...");
+        player.sendMessage(Objects.requireNonNull(messageConfig.getString("milkMessage")));
     }
 
-    private void useNarcan(PlayerItemConsumeEvent event) {
+    private void useNarcan(PlayerItemConsumeEvent event, FileConfiguration messageConfig) {
         Player player = event.getPlayer();
         for (Drug drug : Drug.values()) {
             DrugUsageState drugUsageState = getDrugUsage(player, drug);
@@ -51,6 +55,6 @@ public class NarcanListener implements Listener {
             player.removeMetadata(getPreviousDrugUsageKey(drug), DrugsPlugin.getInstance());
 
         }
-        player.sendMessage(ChatColor.DARK_GREEN + "Your mind feels clear now...");
+        player.sendMessage(Objects.requireNonNull(messageConfig.getString("consumeNarcan")));
     }
 }

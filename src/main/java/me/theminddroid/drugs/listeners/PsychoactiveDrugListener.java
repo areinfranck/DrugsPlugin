@@ -6,6 +6,7 @@ import me.theminddroid.drugs.models.DrugType;
 import me.theminddroid.drugs.states.DrugUsageState;
 import me.theminddroid.drugs.DrugsPlugin;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +19,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Objects;
+
 import static me.theminddroid.drugs.DrugUtilities.*;
 
 public class PsychoactiveDrugListener implements Listener {
+
+    FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
 
     @EventHandler
     public void onDrugConsume(PlayerItemConsumeEvent event) {
@@ -30,7 +35,7 @@ public class PsychoactiveDrugListener implements Listener {
         Drug drug = tryGetPsychoActiveDrug(itemInMainHand);
         if (drug == null) return;
 
-        player.sendMessage(ChatColor.RED + "You must SHIFT + RIGHT-CLICK to consume drugs...");
+        player.sendMessage(Objects.requireNonNull(messageConfig.getString("verifyUsage")));
         event.setCancelled(true);
     }
 
@@ -47,7 +52,7 @@ public class PsychoactiveDrugListener implements Listener {
         if (drug == null) return;
 
         if (player.hasPermission("drugs.disable") && !player.isOp()) {
-            player.sendMessage(ChatColor.RED + "You do not have the required permissions to take drugs.");
+            player.sendMessage(Objects.requireNonNull(messageConfig.getString("drugPermission")));
             return;
         }
 
@@ -60,9 +65,12 @@ public class PsychoactiveDrugListener implements Listener {
 
         player.playSound(player.getLocation(), drugType.getConsumeSound(), 10.f, (float) (1.7 + .2 * Math.random()));
         player.addPotionEffect((new PotionEffect(drugType.getEffect().getEffectType(), 2400, 2)));
-        player.sendMessage(ChatColor.DARK_GREEN + "§lYou took " + ChatColor.GOLD + "§l" + drug.name()
-                + ChatColor.DARK_GREEN + " §land " + drugType.getEffect().getMessage() + " for " + ChatColor.GOLD
-                + "§l2 minutes" + ChatColor.DARK_GREEN + "§l!");
+        player.sendMessage(Objects.requireNonNull(messageConfig.getString("consumeStart"))
+                + drug.name()
+                + Objects.requireNonNull(messageConfig.getString("consumeMiddle"))
+                + drugType.getEffect().getMessage()
+                + Objects.requireNonNull(messageConfig.getString("consumeEnd"))
+        );
 
         DrugUsageState drugUsageState = getDrugUsage(player, drug);
 
@@ -75,29 +83,30 @@ public class PsychoactiveDrugListener implements Listener {
         }
 
         if (amountOfTimesUsed == 4) {
-            player.sendMessage(ChatColor.RED + "I feel like passing out...");
+            player.sendMessage(Objects.requireNonNull(messageConfig.getString("passingMessage")));
             player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 10.f, 0.5f);
         }
 
         //number of times to take the drug before it kills you
         if (amountOfTimesUsed >= 5) {
             Bukkit.getScheduler().runTaskLater(DrugsPlugin.getInstance(), () -> player.setHealth(0), 1);
-            player.sendMessage(ChatColor.RED + "You overdosed and died...");
+            player.sendMessage(Objects.requireNonNull(messageConfig.getString("overdoseMessage")));
             return;
         }
 
         BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(DrugsPlugin.getInstance(), () -> {
 
             if (player.isOnline()) {
-
                 player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_HURT, 10.f, 1.7f);
                 player.addPotionEffect((new PotionEffect(drugType.getWithdrawalEffect().getEffectType(), 600, 2)));
                 player.addPotionEffect((new PotionEffect(PotionEffectType.CONFUSION, 200, 3)));
-                player.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Uh oh, I don't feel so good...");
-                player.sendMessage(ChatColor.DARK_GREEN + "§lYou're suffering from " + ChatColor.GOLD + "§lwithdrawal"
-                        + ChatColor.DARK_GREEN + " §land " + drugType.getWithdrawalEffect().getMessage() + " for "
-                        + ChatColor.GOLD + "§l30 seconds" + ChatColor.DARK_GREEN + "§l...");
+                player.sendMessage(Objects.requireNonNull(messageConfig.getString("dizzyMessage")));
+                player.sendMessage(Objects.requireNonNull(messageConfig.getString("withdrawalMessageStart"))
+                        + drugType.getWithdrawalEffect().getMessage()
+                        + Objects.requireNonNull(messageConfig.getString("withdrawalMessageEnd"))
+                );
                 player.removeMetadata(getPreviousDrugUsageKey(drug), DrugsPlugin.getInstance());
+
                 setPlayerWithdrawal(player, drug);
             }
         }, 2401);

@@ -20,13 +20,19 @@ public final class DrugsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+
         System.out.println("[Drugs] Drugs plugin has started.");
+
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+
         getServer().getPluginManager().registerEvents(new PsychoactiveDrugListener(), this);
         getServer().getPluginManager().registerEvents(new NarcanListener(), this);
+
         Objects.requireNonNull(getCommand("drugs")).setExecutor(new DrugCommandExecutor());
         Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new DrugTabCompleter());
-        registerGlow();
 
+        registerGlow();
 
         System.out.println("[Drugs] Building drug recipes:");
 

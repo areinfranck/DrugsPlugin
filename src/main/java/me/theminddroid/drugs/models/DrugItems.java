@@ -2,8 +2,8 @@ package me.theminddroid.drugs.models;
 
 import me.theminddroid.drugs.DrugsPlugin;
 import org.apache.commons.lang.NotImplementedException;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +11,10 @@ import java.util.Arrays;
 
 public class DrugItems {
     public static ItemStack createItemStackForDrug(Drug drug) {
-        String[] messages = getDrugMessages(drug);
+
+        FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
+
+        String[] messages = getDrugMessages(drug, messageConfig);
 
         return getItemStack(
                 drug.getMaterial(),
@@ -41,26 +44,25 @@ public class DrugItems {
         return drug;
     }
 
-    private static String[] getDrugMessages(Drug drug) throws NotImplementedException {
+    private static String[] getDrugMessages(Drug drug, FileConfiguration messageConfig) throws NotImplementedException {
         if (drug.getDrugType() instanceof DrugType.PsychoActive) {
-            return getPsychoActiveMessages(drug);
+            return getPsychoActiveMessages(drug, messageConfig);
         } else if (drug.getDrugType() instanceof DrugType.Narcan) {
-            return getNarcanMessages();
+            return new String[] {messageConfig.getString("narcanMessage")};
         } else {
             throw new NotImplementedException("Getting the messages for drug type " + drug.getDrugType().getClass().getName() + " is not implemented");
         }
     }
 
-    private static String[] getNarcanMessages() {
+    /*private static String[] getNarcanMessages() {
         return new String[]{ChatColor.DARK_GREEN
                 + "Removes all " + ChatColor.GOLD + "drug " + ChatColor.DARK_GREEN + "and" + ChatColor.GOLD
                 + " withdrawal " + ChatColor.DARK_GREEN + "effects."};
-    }
+    }*/
 
-    private static String[] getPsychoActiveMessages(Drug drug) {
-        return new String[]{ChatColor.DARK_GREEN + "Grants " + ChatColor.GOLD + drug.getEffectName() + ChatColor.DARK_GREEN
-                + " for two minutes.",
-                ChatColor.DARK_GREEN + "Shift click to use."};
+    private static String[] getPsychoActiveMessages(Drug drug, FileConfiguration messageConfig) {
+        return new String[] {messageConfig.getString("messageStartPsych") + drug.getEffectName() + messageConfig.getString("messageEndPsych"),
+                messageConfig.getString("useInstructionPsych")};
     }
 
     private static ItemStack getItemStack(Material material, String displayName, String... message) {
