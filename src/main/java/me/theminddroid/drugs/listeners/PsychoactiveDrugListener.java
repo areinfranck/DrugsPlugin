@@ -56,6 +56,14 @@ public class PsychoactiveDrugListener implements Listener {
             return;
         }
 
+        if (!messageConfig.getBoolean(drug.getDrugName() + "Use.enabled")) {
+
+            if (messageConfig.getBoolean("drugMessage.enabled")) {
+                player.sendMessage(Objects.requireNonNull(messageConfig.getString("drugDisabled")));
+            }
+            return;
+        }
+
         if (player.getGameMode() == GameMode.SURVIVAL && !player.isDead()) {
             int itemAmount = itemInMainHand.getAmount();
             itemInMainHand.setAmount(itemAmount - 1);

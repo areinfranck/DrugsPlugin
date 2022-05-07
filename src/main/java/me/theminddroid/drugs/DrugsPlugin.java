@@ -22,7 +22,7 @@ public final class DrugsPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
 
-        System.out.println("[Drugs] Drugs plugin has started.");
+        System.out.println("[Drugs] Drugs by TheMindDroid.");
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

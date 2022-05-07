@@ -90,7 +90,7 @@ public enum Drug {
                     new DrugType.PsychoActive(Sound.ENTITY_PLAYER_BURP,
                     new DrugEffect(PotionEffectType.HEALTH_BOOST, "gained health boost"),
                     new DrugEffect(PotionEffectType.POISON, "gained poison")),
-            new DrugRecipe.VerticalShaped(Material.RED_MUSHROOM, Material.BLAZE_POWDER, Material.PAPER)
+            new DrugRecipe.VerticalShaped(Material.RED_MUSHROOM, Material.BLAZE_POWDER, Material.BOWL)
             );
 
     private static final Map<String, Drug> byDisplayName = new HashMap<>();

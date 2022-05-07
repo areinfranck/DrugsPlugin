@@ -45,6 +45,17 @@ public class NarcanListener implements Listener {
 
     private void useNarcan(PlayerItemConsumeEvent event, FileConfiguration messageConfig) {
         Player player = event.getPlayer();
+
+        if (!messageConfig.getBoolean("NarcanUse.enabled")) {
+
+            if (messageConfig.getBoolean("drugMessage.enabled")) {
+                event.getPlayer().sendMessage(Objects.requireNonNull(messageConfig.getString("drugDisabled")));
+            }
+
+            event.setCancelled(true);
+            return;
+        }
+
         for (Drug drug : Drug.values()) {
             DrugUsageState drugUsageState = getDrugUsage(player, drug);
             if (drugUsageState == null) {

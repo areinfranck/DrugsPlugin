@@ -1,12 +1,44 @@
-################################################[DRUGS v6.1]###########################################################
+###################################################[DRUGS v6.1]########################################################
 
 # DISCLAIMER: EDIT AT YOUR OWN RISK! IMPROPER USE OF CONFIG MAY RESULT IN CRASHES.
- # If after editing the config you experience issues, delete the file and restart the server.
+ # If after editing the config you experience issues, delete the file and restart the server...
 
+# --------------------------------------------[USAGE RECIPE TOGGLE]----------------------------------------------------
 
-# ----------------------------------------[DRUG AND RECIPE TOGGLE]-----------------------------------------------------
+# Allows administrators to toggle usage of individual drugs.
 
-# Allows administrators to toggle individual drug usage, along with respective crafting recipes.
+# Toggle message sent to players informing them the drugs they are attempting to take are disabled.
+drugMessage:
+  enabled: true
+
+NarcanUse:
+  enabled: true
+CocaineUse:
+  enabled: true
+HeroinUse:
+  enabled: true
+AdderallUse:
+  enabled: true
+SteroidsUse:
+  enabled: true
+HennessyUse:
+  enabled: true
+KetamineUse:
+  enabled: true
+MarijuanaUse:
+  enabled: true
+LSDUse:
+  enabled: true
+EcstasyUse:
+  enabled: true
+AyahuascaUse:
+  enabled: true
+ShroomsUse:
+  enabled: true
+
+# --------------------------------------------[DRUG RECIPE TOGGLE]-----------------------------------------------------
+
+# Allows administrators to toggle individual crafting recipes.
 
 # Toggle all recipes server-wide for all players.
 allRecipes:
@@ -38,8 +70,7 @@ AyahuascaRecipe:
 ShroomsRecipe:
   enabled: true
 
-
-# -----------------------------------------[TRANSLATION SECTION]-------------------------------------------------------
+# -------------------------------------------[TRANSLATION SECTION]-----------------------------------------------------
 
 # It is recommended that you DO NOT edit the following section. It is intended for language translation only.
   # Make sure ALL FIELDS are filled, or plugin may not function properly.
@@ -57,7 +88,7 @@ usageMessage: "§2Usage: §6/drugs <drug>§2 to spawn."
 narcanMessage: "§2Removes all §6drug §2and §6withdrawal §2effects."
 messageStartPsych: "§2Grants §6" # [effect name]
 messageEndPsych: "§2 for two minutes."
-useInstructionPsych: "§2Shift click to use."
+useInstructionPsych: "§2SHIFT CLICK to use."
 
 #NarcanListner
 milkMessage: "§cYou must use Narcan to cancel the effects of drugs..."
@@ -66,6 +97,7 @@ consumeNarcan: "§2Your mind feels clear now..."
 #PsychoactiveDrugListener
 verifyUsage: "§cYou must SHIFT + RIGHT-CLICK to consume drugs..."
 drugPermission: "§cYou do not have the required permissions to take drugs."
+drugDisabled: "§cThis drug is disabled."
 consumeStart: "§2§lYou took §6§l" # [drug name]
 consumeMiddle: " §2§land " # [effect message]
 consumeEnd: " for §6§l2 minutes§2§l!"
