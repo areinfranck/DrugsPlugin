@@ -7,55 +7,64 @@ import org.bukkit.inventory.ItemStack;
 
 public class Glow extends Enchantment {
 
-    public Glow(NamespacedKey i) {
+    public Glow(NamespacedKey i)
+    {
         super(i);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public boolean canEnchantItem(ItemStack arg0) {
+    public boolean canEnchantItem(ItemStack arg0)
+    {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean conflictsWith(Enchantment arg0) {
+    public boolean conflictsWith(Enchantment arg0)
+    {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public EnchantmentTarget getItemTarget() {
+    public EnchantmentTarget getItemTarget()
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public int getMaxLevel() {
+    public int getMaxLevel()
+    {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         // TODO Auto-generated method stub
         return "Drug";
     }
 
     @Override
-    public int getStartLevel() {
+    public int getStartLevel()
+    {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public boolean isCursed() {
+    public boolean isCursed()
+    {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean isTreasure() {
+    public boolean isTreasure()
+    {
         // TODO Auto-generated method stub
         return false;
     }

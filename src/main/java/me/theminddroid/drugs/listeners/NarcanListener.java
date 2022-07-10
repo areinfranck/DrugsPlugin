@@ -16,51 +16,48 @@ import java.util.Objects;
 
 import static me.theminddroid.drugs.DrugUtilities.*;
 
-public class NarcanListener implements Listener {
+public class NarcanListener implements Listener
+{
     @EventHandler
-    public void onDrinkMilk(PlayerItemConsumeEvent event) {
-
+    public void onDrinkMilk(PlayerItemConsumeEvent event)
+    {
         FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
 
-        if (event.getItem().getType() != Material.MILK_BUCKET) {
-            return;
-        }
+        if (event.getItem().getType() != Material.MILK_BUCKET) return;
 
-        if (Objects.requireNonNull(event.getItem().getItemMeta()).getDisplayName().equals(ChatColor.RED + "Narcan")) {
+        if (Objects.requireNonNull(event.getItem().getItemMeta()).getDisplayName().equals(ChatColor.RED + "Narcan"))
+        {
             useNarcan(event, messageConfig);
             return;
         }
         cancelIfPlayerOnDrugs(event, messageConfig);
     }
 
-    private void cancelIfPlayerOnDrugs(PlayerItemConsumeEvent event, FileConfiguration messageConfig) {
+    private void cancelIfPlayerOnDrugs(PlayerItemConsumeEvent event, FileConfiguration messageConfig)
+    {
         Player player = event.getPlayer();
-        if (Arrays.stream(Drug.values()).noneMatch(drug -> playerIsOnDrugs(player, drug) || playerIsOnDrugWithdrawal(player, drug))) {
-            return;
-        }
+        if (Arrays.stream(Drug.values()).noneMatch(drug -> playerIsOnDrugs(player, drug) || playerIsOnDrugWithdrawal(player, drug))) return;
 
         event.setCancelled(true);
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("milkMessage")));
     }
 
-    private void useNarcan(PlayerItemConsumeEvent event, FileConfiguration messageConfig) {
+    private void useNarcan(PlayerItemConsumeEvent event, FileConfiguration messageConfig)
+    {
         Player player = event.getPlayer();
 
-        if (!messageConfig.getBoolean("NarcanUse.enabled")) {
-
-            if (messageConfig.getBoolean("drugMessage.enabled")) {
-                event.getPlayer().sendMessage(Objects.requireNonNull(messageConfig.getString("drugDisabled")));
-            }
+        if (!messageConfig.getBoolean("NarcanUse.enabled"))
+        {
+            if (messageConfig.getBoolean("drugMessage.enabled")) event.getPlayer().sendMessage(Objects.requireNonNull(messageConfig.getString("drugDisabled")));
 
             event.setCancelled(true);
             return;
         }
 
-        for (Drug drug : Drug.values()) {
+        for (Drug drug : Drug.values())
+        {
             DrugUsageState drugUsageState = getDrugUsage(player, drug);
-            if (drugUsageState == null) {
-                continue;
-            }
+            if (drugUsageState == null) continue;
 
             drugUsageState.getWithdrawalTask().cancel();
             player.removeMetadata(getPreviousDrugUsageKey(drug), DrugsPlugin.getInstance());

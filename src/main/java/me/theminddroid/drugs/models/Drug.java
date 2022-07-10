@@ -8,7 +8,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum Drug {
+public enum Drug
+{
     Narcan(
             Material.MILK_BUCKET,
             "narcan",
@@ -97,7 +98,8 @@ public enum Drug {
     private static final Map<String, Drug> byLowerCaseName = new HashMap<>();
 
     static {
-        for (Drug value : values()) {
+        for (Drug value : values())
+        {
             byDisplayName.put(value.getDisplayName(), value);
             byLowerCaseName.put(value.name().toLowerCase(), value);
         }
@@ -108,7 +110,8 @@ public enum Drug {
     private final DrugType drugType;
     private final DrugRecipe recipe;
 
-    Drug(Material material, String effectName, DrugType drugType, DrugRecipe recipe) {
+    Drug(Material material, String effectName, DrugType drugType, DrugRecipe recipe)
+    {
         this.effectName = effectName;
         this.drugType = drugType;
         this.recipe = recipe;

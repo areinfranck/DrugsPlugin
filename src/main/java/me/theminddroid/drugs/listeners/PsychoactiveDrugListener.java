@@ -23,12 +23,14 @@ import java.util.Objects;
 
 import static me.theminddroid.drugs.DrugUtilities.*;
 
-public class PsychoactiveDrugListener implements Listener {
+public class PsychoactiveDrugListener implements Listener
+{
 
     FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
 
     @EventHandler
-    public void onDrugConsume(PlayerItemConsumeEvent event) {
+    public void onDrugConsume(PlayerItemConsumeEvent event)
+    {
         Player player = event.getPlayer();
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
 
@@ -40,31 +42,33 @@ public class PsychoactiveDrugListener implements Listener {
     }
 
     @EventHandler
-    public void onDrugUse(PlayerInteractEvent event) {
+    public void onDrugUse(PlayerInteractEvent event)
+    {
         Player player = event.getPlayer();
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
 
-        if (!player.isSneaking()) {
-            return;
-        }
+        if (!player.isSneaking()) return;
 
         Drug drug = tryGetPsychoActiveDrug(itemInMainHand);
         if (drug == null) return;
 
-        if (player.hasPermission("drugs.disable") && !player.isOp()) {
+        if (player.hasPermission("drugs.disable") && !player.isOp())
+        {
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("drugPermission")));
             return;
         }
 
-        if (!messageConfig.getBoolean(drug.getDrugName() + "Use.enabled")) {
-
-            if (messageConfig.getBoolean("drugMessage.enabled")) {
+        if (!messageConfig.getBoolean(drug.getDrugName() + "Use.enabled"))
+        {
+            if (messageConfig.getBoolean("drugMessage.enabled"))
+            {
                 player.sendMessage(Objects.requireNonNull(messageConfig.getString("drugDisabled")));
             }
             return;
         }
 
-        if (player.getGameMode() == GameMode.SURVIVAL && !player.isDead()) {
+        if (player.getGameMode() == GameMode.SURVIVAL && !player.isDead())
+        {
             int itemAmount = itemInMainHand.getAmount();
             itemInMainHand.setAmount(itemAmount - 1);
         }
@@ -84,19 +88,22 @@ public class PsychoactiveDrugListener implements Listener {
 
         int amountOfTimesUsed = 1;
 
-        if (drugUsageState != null) {
+        if (drugUsageState != null)
+        {
             amountOfTimesUsed += drugUsageState.getAmountOfTimesUsed();
             drugUsageState.getWithdrawalTask().cancel();
             player.removeMetadata(getPreviousDrugUsageKey(drug), DrugsPlugin.getInstance());
         }
 
-        if (amountOfTimesUsed == 4) {
+        if (amountOfTimesUsed == 4)
+        {
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("passingMessage")));
             player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 10.f, 0.5f);
         }
 
         //number of times to take the drug before it kills you
-        if (amountOfTimesUsed >= 5) {
+        if (amountOfTimesUsed >= 5)
+        {
             Bukkit.getScheduler().runTaskLater(DrugsPlugin.getInstance(), () -> player.setHealth(0), 1);
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("overdoseMessage")));
             return;
@@ -123,30 +130,22 @@ public class PsychoactiveDrugListener implements Listener {
                 new DrugUsageState(amountOfTimesUsed, bukkitTask)));
     }
 
-    private Drug tryGetPsychoActiveDrug(ItemStack itemStack) {
+    private Drug tryGetPsychoActiveDrug(ItemStack itemStack)
+    {
         Drug drug = DrugItems.tryGetDrug(itemStack);
-        if (drug == null) {
-            return null;
-        }
-
-        if (!(drug.getDrugType() instanceof DrugType.PsychoActive)) {
-            return null;
-        }
+        if (drug == null) return null;
+        if (!(drug.getDrugType() instanceof DrugType.PsychoActive)) return null;
 
         return drug;
     }
 
-
     @EventHandler
-    public void onDeath(PlayerDeathEvent event) {
-
-        for (Drug drug : Drug.values()) {
-
+    public void onDeath(PlayerDeathEvent event)
+    {
+        for (Drug drug : Drug.values())
+        {
             DrugUsageState drugUsageState = getDrugUsage(event.getEntity(), drug);
-
-            if (drugUsageState != null) {
-                drugUsageState.getWithdrawalTask().cancel();
-            }
+            if (drugUsageState != null) drugUsageState.getWithdrawalTask().cancel();
         }
     }
 }

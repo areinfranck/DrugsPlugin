@@ -2,6 +2,7 @@ package me.theminddroid.drugs;
 
 import me.theminddroid.drugs.models.Drug;
 import me.theminddroid.drugs.models.DrugItems;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,32 +13,36 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
-public class DrugCommandExecutor implements CommandExecutor {
-
+public class DrugCommandExecutor implements CommandExecutor
+{
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
         FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
 
-        if (!(sender instanceof Player)) {
-            System.out.println("You must be a player to run this command.");
+        if (!(sender instanceof Player))
+        {
+            Bukkit.getLogger().info("You must be a player to run this command.");
             return true;
         }
 
         Player player = (Player) sender;
-        if (!(player.hasPermission("drugs.admin"))) {
+        if (!(player.hasPermission("drugs.admin")))
+        {
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("verifyPermission")));
             return true;
         }
 
-        if (args.length == 0) {
+        if (args.length == 0)
+        {
             sendHelp(player, messageConfig);
             return true;
         }
 
         Drug drug = Drug.getByNameCaseInsensitive(args[0]);
 
-        if (drug == null) {
+        if (drug == null)
+        {
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("verifyDrug")));
             return true;
         }
@@ -51,11 +56,13 @@ public class DrugCommandExecutor implements CommandExecutor {
         return true;
     }
 
-    private void sendHelp(Player player, FileConfiguration messageConfig) {
+    private void sendHelp(Player player, FileConfiguration messageConfig)
+    {
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("selectDrug")));
-        for (Drug value : Drug.values()) {
+
+        for (Drug value : Drug.values())
             player.sendMessage(ChatColor.DARK_GREEN + " - " + ChatColor.GOLD + value.name());
-        }
+
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("usageMessage")));
     }
 }

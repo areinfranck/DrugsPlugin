@@ -16,13 +16,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-public final class DrugsPlugin extends JavaPlugin {
-
+public final class DrugsPlugin extends JavaPlugin
+{
     @Override
-    public void onEnable() {
-        // Plugin startup logic
-
-        System.out.println("[Drugs] Drugs by TheMindDroid.");
+    public void onEnable()
+    {
+        Bukkit.getLogger().info("[Drugs] Drugs by TheMindDroid.");
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -39,35 +38,33 @@ public final class DrugsPlugin extends JavaPlugin {
 
         new Metrics(this, 10825);
 
-        if (!messageConfig.getBoolean("allRecipes.enabled")) {
-            System.out.println("[Drugs] Drug recipes have been disabled. Visit config file to change.");
+        if (!messageConfig.getBoolean("allRecipes.enabled"))
+        {
+            Bukkit.getLogger().info("[Drugs] Drug recipes have been disabled. Visit config file to change.");
             return;
         }
 
-        System.out.println("[Drugs] Building drug recipes:");
+        Bukkit.getLogger().info("[Drugs] Building drug recipes:");
 
-        for (Drug recipe : Drug.values()) {
+        for (Drug recipe : Drug.values())
+        {
+            if (!messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled")) continue;
 
-            if (!messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled")) {
-                continue;
-            }
-
-            System.out.print("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
+            Bukkit.getLogger().info("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
             Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
-            if (drugRecipe != null) {
-                getServer().addRecipe(drugRecipe);
-            }
-
-            System.out.println(" Complete.");
+            if (drugRecipe != null) getServer().addRecipe(drugRecipe);
         }
     }
 
-    public void registerGlow() {
-        try {
+    public void registerGlow()
+    {
+        try
+        {
             Field f = Enchantment.class.getDeclaredField("acceptingNew");
             f.setAccessible(true);
             f.set(null, true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         try {
@@ -78,11 +75,13 @@ public final class DrugsPlugin extends JavaPlugin {
         }
     }
 
-    public Glow createGlowEnchant() {
+    public Glow createGlowEnchant()
+    {
         return new Glow(new NamespacedKey(this, "glow"));
     }
 
-    public static DrugsPlugin getInstance() {
+    public static DrugsPlugin getInstance()
+    {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("Drugs");
         if (!(plugin instanceof DrugsPlugin)) {
             throw new RuntimeException("'Drugs' not found. 'Drugs' plugin disabled?");
@@ -91,14 +90,13 @@ public final class DrugsPlugin extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        for (Drug recipe : Drug.values()) {
-            System.out.print("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
+    public void onDisable()
+    {
+        for (Drug recipe : Drug.values())
+        {
+            Bukkit.getLogger().info("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
             getServer().removeRecipe(Recipes.getKey(this, recipe));
-
-            System.out.println(" Complete.");
         }
-
-        System.out.println("Drugs plugin has terminated.");
+        Bukkit.getLogger().info("Drugs plugin has terminated.");
     }
 }

@@ -2,32 +2,39 @@ package me.theminddroid.drugs.models;
 
 import org.bukkit.Sound;
 
-public abstract class DrugType {
-    public static class PsychoActive extends DrugType {
+public abstract class DrugType
+{
+    public static class PsychoActive extends DrugType
+    {
         private final Sound consumeSound;
         private final DrugEffect effect;
         private final DrugEffect withdrawalEffect;
 
-        public PsychoActive(Sound consumeSound, DrugEffect effect, DrugEffect withdrawalEffect) {
+        public PsychoActive(Sound consumeSound, DrugEffect effect, DrugEffect withdrawalEffect)
+        {
             this.consumeSound = consumeSound;
             this.effect = effect;
             this.withdrawalEffect = withdrawalEffect;
         }
 
-        public Sound getConsumeSound() {
+        public Sound getConsumeSound()
+        {
             return consumeSound;
         }
 
-        public DrugEffect getEffect() {
+        public DrugEffect getEffect()
+        {
             return effect;
         }
 
-        public DrugEffect getWithdrawalEffect() {
+        public DrugEffect getWithdrawalEffect()
+        {
             return withdrawalEffect;
         }
     }
 
-    public static class Narcan extends DrugType {
+    public static class Narcan extends DrugType
+    {
 
     }
 }
