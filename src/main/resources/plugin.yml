@@ -1,7 +1,7 @@
 name: Drugs
 version: 6.2
 main: me.theminddroid.drugs.DrugsPlugin
-api-version: "1.19"
+api-version: "1.18"
 authors: [TheMindDroid]
 description: Gives specific items drug effects
 commands:

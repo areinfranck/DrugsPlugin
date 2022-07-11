@@ -1,7 +1,7 @@
 package me.theminddroid.drugs.models;
 
 import me.theminddroid.drugs.DrugsPlugin;
-import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
