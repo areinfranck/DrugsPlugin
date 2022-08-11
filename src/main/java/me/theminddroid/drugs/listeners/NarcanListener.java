@@ -1,5 +1,6 @@
 package me.theminddroid.drugs.listeners;
 
+import me.theminddroid.drugs.DrugManager;
 import me.theminddroid.drugs.models.Drug;
 import me.theminddroid.drugs.states.DrugUsageState;
 import me.theminddroid.drugs.DrugsPlugin;
@@ -11,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static me.theminddroid.drugs.DrugUtilities.*;
@@ -36,7 +36,7 @@ public class NarcanListener implements Listener
     private void cancelIfPlayerOnDrugs(PlayerItemConsumeEvent event, FileConfiguration messageConfig)
     {
         Player player = event.getPlayer();
-        if (Arrays.stream(Drug.values()).noneMatch(drug -> playerIsOnDrugs(player, drug) || playerIsOnDrugWithdrawal(player, drug))) return;
+        if (DrugManager.getActiveDrugs().stream().noneMatch(drug -> playerIsOnDrugs(player, drug) || playerIsOnDrugWithdrawal(player, drug))) return;
 
         event.setCancelled(true);
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("milkMessage")));
@@ -54,7 +54,7 @@ public class NarcanListener implements Listener
             return;
         }
 
-        for (Drug drug : Drug.values())
+        for (Drug drug : DrugManager.getActiveDrugs())
         {
             DrugUsageState drugUsageState = getDrugUsage(player, drug);
             if (drugUsageState == null) continue;

@@ -46,7 +46,7 @@ public final class DrugsPlugin extends JavaPlugin
 
         Bukkit.getLogger().info("[Drugs] Building drug recipes:");
 
-        for (Drug recipe : Drug.values())
+        for (Drug recipe : DrugManager.getActiveDrugs())
         {
             if (!messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled")) continue;
 
@@ -92,7 +92,7 @@ public final class DrugsPlugin extends JavaPlugin
     @Override
     public void onDisable()
     {
-        for (Drug recipe : Drug.values())
+        for (Drug recipe : DrugManager.getActiveDrugs())
         {
             Bukkit.getLogger().info("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
             getServer().removeRecipe(Recipes.getKey(this, recipe));

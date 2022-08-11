@@ -15,9 +15,8 @@ public class Recipes
                 DrugItems.createItemStackForDrug(drug)
         );
 
-        if (drug.getRecipe() instanceof DrugRecipe.VerticalShaped)
+        if (drug.recipe() instanceof DrugRecipe.VerticalShaped recipe)
         {
-            DrugRecipe.VerticalShaped recipe = ((DrugRecipe.VerticalShaped) drug.getRecipe());
 
             drugRecipe.shape(" X ", " Y ", " Z ");
             drugRecipe.setIngredient('X', recipe.getTop());
@@ -26,7 +25,7 @@ public class Recipes
             return drugRecipe;
         }
 
-        if (drug.getRecipe() instanceof DrugRecipe.None) return null;
+        if (drug.recipe() instanceof DrugRecipe.None) return null;
 
         throw new NotImplementedException("Drug type " + drug.getClass().getName() + " is not supported.");
     }

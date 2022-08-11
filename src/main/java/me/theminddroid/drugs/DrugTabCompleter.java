@@ -15,7 +15,7 @@ public class DrugTabCompleter implements TabCompleter
         if (args.length != 1) return null;
 
         final ArrayList<String> result = new ArrayList<>();
-        for (Drug value : Drug.values())
+        for (Drug value : DrugManager.getActiveDrugs())
         {
             String arg = value.getDrugName();
             if (arg.toLowerCase().startsWith(args[0].toLowerCase())) result.add(arg);
