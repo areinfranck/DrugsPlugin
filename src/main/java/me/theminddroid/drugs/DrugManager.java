@@ -134,4 +134,14 @@ public class DrugManager {
     public static Collection<Drug> getActiveDrugs() {
         return byDisplayName.values();
     }
+
+    static void addDrug(Drug drug) {
+        byDisplayName.putIfAbsent(drug.getDisplayName(), drug);
+        byLowerCaseName.putIfAbsent(drug.name().toLowerCase(), drug);
+    }
+
+    static void removeDrug(Drug drug) {
+        byDisplayName.remove(drug.getDisplayName());
+        byLowerCaseName.remove(drug.name().toLowerCase());
+    }
 }

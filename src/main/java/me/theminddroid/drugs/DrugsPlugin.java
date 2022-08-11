@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
@@ -49,15 +50,19 @@ public final class DrugsPlugin extends JavaPlugin
         DrugManager.getActiveDrugs().stream()
                 .filter(recipe -> messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled"))
                 .forEach(this::registerDrugRecipe);
+
+        getServer().getServicesManager().register(DrugsService.class, new DrugsService(), this, ServicePriority.Normal);
     }
 
-    public void registerDrugRecipe(Drug recipe) {
+    public void registerDrugRecipe(Drug recipe)
+    {
         Bukkit.getLogger().info("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
         Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
         if (drugRecipe != null) getServer().addRecipe(drugRecipe);
     }
 
-    public void unregisterDrugRecipe(Drug recipe) {
+    public void unregisterDrugRecipe(Drug recipe)
+    {
         Bukkit.getLogger().info("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
         getServer().removeRecipe(Recipes.getKey(this, recipe));
     }
