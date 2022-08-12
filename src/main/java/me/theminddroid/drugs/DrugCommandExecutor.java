@@ -20,13 +20,12 @@ public class DrugCommandExecutor implements CommandExecutor
     {
         FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
 
-        if (!(sender instanceof Player))
+        if (!(sender instanceof Player player))
         {
             Bukkit.getLogger().info("You must be a player to run this command.");
             return true;
         }
 
-        Player player = (Player) sender;
         if (!(player.hasPermission("drugs.admin")))
         {
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("verifyPermission")));
@@ -39,7 +38,7 @@ public class DrugCommandExecutor implements CommandExecutor
             return true;
         }
 
-        Drug drug = Drug.getByNameCaseInsensitive(args[0]);
+        Drug drug = DrugManager.getByNameCaseInsensitive(args[0]);
 
         if (drug == null)
         {
@@ -60,7 +59,7 @@ public class DrugCommandExecutor implements CommandExecutor
     {
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("selectDrug")));
 
-        for (Drug value : Drug.values())
+        for (Drug value : DrugManager.getActiveDrugs())
             player.sendMessage(ChatColor.DARK_GREEN + " - " + ChatColor.GOLD + value.name());
 
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("usageMessage")));

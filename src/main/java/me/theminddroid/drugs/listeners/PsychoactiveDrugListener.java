@@ -1,5 +1,6 @@
 package me.theminddroid.drugs.listeners;
 
+import me.theminddroid.drugs.DrugManager;
 import me.theminddroid.drugs.models.Drug;
 import me.theminddroid.drugs.models.DrugItems;
 import me.theminddroid.drugs.models.DrugType;
@@ -58,7 +59,7 @@ public class PsychoactiveDrugListener implements Listener
             return;
         }
 
-        if (!messageConfig.getBoolean(drug.getDrugName() + "Use.enabled"))
+        if (!DrugManager.isDrugEnabled(drug))
         {
             if (messageConfig.getBoolean("drugMessage.enabled"))
             {
@@ -73,14 +74,14 @@ public class PsychoactiveDrugListener implements Listener
             itemInMainHand.setAmount(itemAmount - 1);
         }
 
-        DrugType.PsychoActive drugType = (DrugType.PsychoActive) drug.getDrugType();
+        DrugType.PsychoActive drugType = (DrugType.PsychoActive) drug.drugType();
 
         player.playSound(player.getLocation(), drugType.getConsumeSound(), 10.f, (float) (1.7 + .2 * Math.random()));
-        player.addPotionEffect((new PotionEffect(drugType.getEffect().getEffectType(), 2400, 2)));
+        player.addPotionEffect((new PotionEffect(drugType.getEffect().effectType(), 2400, 2)));
         player.sendMessage(Objects.requireNonNull(messageConfig.getString("consumeStart"))
                 + drug.name()
                 + Objects.requireNonNull(messageConfig.getString("consumeMiddle"))
-                + drugType.getEffect().getMessage()
+                + drugType.getEffect().message()
                 + Objects.requireNonNull(messageConfig.getString("consumeEnd"))
         );
 
@@ -113,11 +114,11 @@ public class PsychoactiveDrugListener implements Listener
 
             if (player.isOnline()) {
                 player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_HURT, 10.f, 1.7f);
-                player.addPotionEffect((new PotionEffect(drugType.getWithdrawalEffect().getEffectType(), 600, 2)));
+                player.addPotionEffect((new PotionEffect(drugType.getWithdrawalEffect().effectType(), 600, 2)));
                 player.addPotionEffect((new PotionEffect(PotionEffectType.CONFUSION, 200, 3)));
                 player.sendMessage(Objects.requireNonNull(messageConfig.getString("dizzyMessage")));
                 player.sendMessage(Objects.requireNonNull(messageConfig.getString("withdrawalMessageStart"))
-                        + drugType.getWithdrawalEffect().getMessage()
+                        + drugType.getWithdrawalEffect().message()
                         + Objects.requireNonNull(messageConfig.getString("withdrawalMessageEnd"))
                 );
                 player.removeMetadata(getPreviousDrugUsageKey(drug), DrugsPlugin.getInstance());
@@ -134,7 +135,7 @@ public class PsychoactiveDrugListener implements Listener
     {
         Drug drug = DrugItems.tryGetDrug(itemStack);
         if (drug == null) return null;
-        if (!(drug.getDrugType() instanceof DrugType.PsychoActive)) return null;
+        if (!(drug.drugType() instanceof DrugType.PsychoActive)) return null;
 
         return drug;
     }
@@ -142,7 +143,7 @@ public class PsychoactiveDrugListener implements Listener
     @EventHandler
     public void onDeath(PlayerDeathEvent event)
     {
-        for (Drug drug : Drug.values())
+        for (Drug drug : DrugManager.getActiveDrugs())
         {
             DrugUsageState drugUsageState = getDrugUsage(event.getEntity(), drug);
             if (drugUsageState != null) drugUsageState.getWithdrawalTask().cancel();

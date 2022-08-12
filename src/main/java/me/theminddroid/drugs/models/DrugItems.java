@@ -1,5 +1,6 @@
 package me.theminddroid.drugs.models;
 
+import me.theminddroid.drugs.DrugManager;
 import me.theminddroid.drugs.DrugsPlugin;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Material;
@@ -18,7 +19,7 @@ public class DrugItems
         String[] messages = getDrugMessages(drug, messageConfig);
 
         return getItemStack(
-                drug.getMaterial(),
+                drug.material(),
                 drug.getDisplayName(),
                 messages);
     }
@@ -30,24 +31,24 @@ public class DrugItems
         if (itemMeta == null) return null;
 
         String itemName = itemMeta.getDisplayName();
-        Drug drug = Drug.getByDisplayName(itemName);
+        Drug drug = DrugManager.getByDisplayName(itemName);
 
         if (drug == null) return null;
-        if (itemStack.getType() != drug.getMaterial()) return null;
+        if (itemStack.getType() != drug.material()) return null;
 
         return drug;
     }
 
     private static String[] getDrugMessages(Drug drug, FileConfiguration messageConfig) throws NotImplementedException
     {
-        if (drug.getDrugType() instanceof DrugType.PsychoActive) return getPsychoActiveMessages(drug, messageConfig);
-        else if (drug.getDrugType() instanceof DrugType.Narcan) return new String[] {messageConfig.getString("narcanMessage")};
-        else throw new NotImplementedException("Getting the messages for drug type " + drug.getDrugType().getClass().getName() + " is not implemented");
+        if (drug.drugType() instanceof DrugType.PsychoActive) return getPsychoActiveMessages(drug, messageConfig);
+        else if (drug.drugType() instanceof DrugType.Narcan) return new String[] {messageConfig.getString("narcanMessage")};
+        else throw new NotImplementedException("Getting the messages for drug type " + drug.drugType().getClass().getName() + " is not implemented");
     }
 
     private static String[] getPsychoActiveMessages(Drug drug, FileConfiguration messageConfig)
     {
-        return new String[] {messageConfig.getString("messageStartPsych") + drug.getEffectName() + messageConfig.getString("messageEndPsych"),
+        return new String[] {messageConfig.getString("messageStartPsych") + drug.effectName() + messageConfig.getString("messageEndPsych"),
                 messageConfig.getString("useInstructionPsych")};
     }
 

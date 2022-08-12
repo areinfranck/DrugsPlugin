@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
@@ -46,14 +47,24 @@ public final class DrugsPlugin extends JavaPlugin
 
         Bukkit.getLogger().info("[Drugs] Building drug recipes:");
 
-        for (Drug recipe : Drug.values())
-        {
-            if (!messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled")) continue;
+        DrugManager.getActiveDrugs().stream()
+                .filter(recipe -> messageConfig.getBoolean(recipe.getDrugName() + "Recipe.enabled"))
+                .forEach(this::registerDrugRecipe);
 
-            Bukkit.getLogger().info("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
-            Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
-            if (drugRecipe != null) getServer().addRecipe(drugRecipe);
-        }
+        getServer().getServicesManager().register(DrugsService.class, new DrugsService(), this, ServicePriority.Normal);
+    }
+
+    public void registerDrugRecipe(Drug recipe)
+    {
+        Bukkit.getLogger().info("[Drugs] Generating recipe for " + recipe.getDrugName() + "...");
+        Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
+        if (drugRecipe != null) getServer().addRecipe(drugRecipe);
+    }
+
+    public void unregisterDrugRecipe(Drug recipe)
+    {
+        Bukkit.getLogger().info("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
+        getServer().removeRecipe(Recipes.getKey(this, recipe));
     }
 
     public void registerGlow()
@@ -92,11 +103,7 @@ public final class DrugsPlugin extends JavaPlugin
     @Override
     public void onDisable()
     {
-        for (Drug recipe : Drug.values())
-        {
-            Bukkit.getLogger().info("[Drugs] Unregistering recipe for " + recipe.getDrugName() + "...");
-            getServer().removeRecipe(Recipes.getKey(this, recipe));
-        }
+        DrugManager.getActiveDrugs().forEach(this::unregisterDrugRecipe);
         Bukkit.getLogger().info("Drugs plugin has terminated.");
     }
 }
