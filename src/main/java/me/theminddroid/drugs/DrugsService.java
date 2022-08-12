@@ -2,14 +2,16 @@ package me.theminddroid.drugs;
 
 import me.theminddroid.drugs.models.Drug;
 
+import java.util.function.Supplier;
+
 public class DrugsService
 {
 
     @SuppressWarnings("unused")
-    public void registerDrug(Drug drug)
+    public void registerDrug(Drug drug, Supplier<Boolean> isDrugEnabled)
     {
         DrugsPlugin.getInstance().registerDrugRecipe(drug);
-        DrugManager.addDrug(drug);
+        DrugManager.addDrug(drug, isDrugEnabled);
     }
 
     @SuppressWarnings("unused")

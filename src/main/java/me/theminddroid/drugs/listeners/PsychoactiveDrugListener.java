@@ -59,7 +59,7 @@ public class PsychoactiveDrugListener implements Listener
             return;
         }
 
-        if (!messageConfig.getBoolean(drug.getDrugName() + "Use.enabled"))
+        if (!DrugManager.isDrugEnabled(drug))
         {
             if (messageConfig.getBoolean("drugMessage.enabled"))
             {

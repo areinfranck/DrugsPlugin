@@ -12,12 +12,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class DrugManager {
     private static final Map<String, Drug> byDisplayName = new HashMap<>();
     private static final Map<String, Drug> byLowerCaseName = new HashMap<>();
+    private static final Map<Drug, Supplier<Boolean>> checkIfEnabled = new HashMap<>();
 
-    static {
+    static
+    {
         // Place drugs into it
         var drugs = Arrays.asList(
                 new Drug(
@@ -116,32 +119,44 @@ public class DrugManager {
                         new DrugRecipe.VerticalShaped(Material.RED_MUSHROOM, Material.BLAZE_POWDER, Material.BOWL))
         );
 
-
         drugs.forEach(drug -> {
             byDisplayName.put(drug.getDisplayName(), drug);
             byLowerCaseName.put(drug.name().toLowerCase(), drug);
+            checkIfEnabled.put(drug, () -> DrugsPlugin.getInstance().getConfig().getBoolean(drug.getDrugName() + "Use.enabled"));
         });
     }
 
-    public static Drug getByDisplayName(String name) {
+    public static Drug getByDisplayName(String name)
+    {
         return byDisplayName.get(name);
     }
 
-    public static Drug getByNameCaseInsensitive(String name) {
+    public static Drug getByNameCaseInsensitive(String name)
+    {
         return byLowerCaseName.get(name.toLowerCase());
     }
 
-    public static Collection<Drug> getActiveDrugs() {
+    public static Collection<Drug> getActiveDrugs()
+    {
         return byDisplayName.values();
     }
 
-    static void addDrug(Drug drug) {
+    static void addDrug(Drug drug, Supplier<Boolean> isDrugEnabled)
+    {
         byDisplayName.putIfAbsent(drug.getDisplayName(), drug);
         byLowerCaseName.putIfAbsent(drug.name().toLowerCase(), drug);
+        checkIfEnabled.putIfAbsent(drug, isDrugEnabled);
     }
 
-    static void removeDrug(Drug drug) {
+    static void removeDrug(Drug drug)
+    {
         byDisplayName.remove(drug.getDisplayName());
         byLowerCaseName.remove(drug.name().toLowerCase());
+        checkIfEnabled.remove(drug);
+    }
+
+    public static boolean isDrugEnabled(Drug drug)
+    {
+        return checkIfEnabled.getOrDefault(drug, () -> false).get();
     }
 }
