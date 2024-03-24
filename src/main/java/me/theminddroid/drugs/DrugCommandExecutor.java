@@ -20,13 +20,12 @@ public class DrugCommandExecutor implements CommandExecutor
     {
         FileConfiguration messageConfig = DrugsPlugin.getPlugin(DrugsPlugin.class).getConfig();
 
-        if (!(sender instanceof Player))
+        if (!(sender instanceof Player player))
         {
             Bukkit.getLogger().info("You must be a player to run this command.");
             return true;
         }
 
-        Player player = (Player) sender;
         if (!(player.hasPermission("drugs.admin")))
         {
             player.sendMessage(Objects.requireNonNull(messageConfig.getString("verifyPermission")));

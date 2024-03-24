@@ -1,19 +1,15 @@
 package me.theminddroid.drugs;
 
-import me.theminddroid.drugs.listeners.PsychoactiveDrugListener;
 import me.theminddroid.drugs.listeners.NarcanListener;
+import me.theminddroid.drugs.listeners.PsychoactiveDrugListener;
 import me.theminddroid.drugs.models.Drug;
-import me.theminddroid.drugs.models.Glow;
 import me.theminddroid.drugs.models.Recipes;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 public final class DrugsPlugin extends JavaPlugin
@@ -34,8 +30,6 @@ public final class DrugsPlugin extends JavaPlugin
         Objects.requireNonNull(getCommand("drugs")).setExecutor(new DrugCommandExecutor());
         Objects.requireNonNull(this.getCommand("drugs")).setTabCompleter(new DrugTabCompleter());
 
-        registerGlow();
-
         new Metrics(this, 10825);
 
         if (!messageConfig.getBoolean("allRecipes.enabled"))
@@ -54,30 +48,6 @@ public final class DrugsPlugin extends JavaPlugin
             Recipe drugRecipe = Recipes.getDrugRecipe(this, recipe);
             if (drugRecipe != null) getServer().addRecipe(drugRecipe);
         }
-    }
-
-    public void registerGlow()
-    {
-        try
-        {
-            Field f = Enchantment.class.getDeclaredField("acceptingNew");
-            f.setAccessible(true);
-            f.set(null, true);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Enchantment.registerEnchantment(createGlowEnchant());
-        } catch (IllegalArgumentException ignored) {
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Glow createGlowEnchant()
-    {
-        return new Glow(new NamespacedKey(this, "glow"));
     }
 
     public static DrugsPlugin getInstance()

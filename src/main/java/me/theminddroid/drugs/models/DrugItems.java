@@ -1,9 +1,10 @@
 package me.theminddroid.drugs.models;
 
 import me.theminddroid.drugs.DrugsPlugin;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -38,11 +39,10 @@ public class DrugItems
         return drug;
     }
 
-    private static String[] getDrugMessages(Drug drug, FileConfiguration messageConfig) throws NotImplementedException
+    private static String[] getDrugMessages(Drug drug, FileConfiguration messageConfig)
     {
         if (drug.getDrugType() instanceof DrugType.PsychoActive) return getPsychoActiveMessages(drug, messageConfig);
-        else if (drug.getDrugType() instanceof DrugType.Narcan) return new String[] {messageConfig.getString("narcanMessage")};
-        else throw new NotImplementedException("Getting the messages for drug type " + drug.getDrugType().getClass().getName() + " is not implemented");
+        return new String[] {messageConfig.getString("narcanMessage")};
     }
 
     private static String[] getPsychoActiveMessages(Drug drug, FileConfiguration messageConfig)
@@ -56,7 +56,8 @@ public class DrugItems
         ItemStack stack = new ItemStack(material);
         ItemMeta meta = stack.getItemMeta();
         assert meta != null;
-        meta.addEnchant(DrugsPlugin.getInstance().createGlowEnchant(), 1, true);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.setDisplayName(displayName);
         meta.setLore(Arrays.asList(message));
         stack.setItemMeta(meta);
